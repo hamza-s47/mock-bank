@@ -48,15 +48,8 @@ jobs:
        migrate -version
        which migrate
 
-    - name: Wait for Postgres
-      run: |
-        for i in {1..10}; do
-          pg_isready -h localhost -p 5432 && break
-          sleep 2
-        done
-
     - name: Run migrations
-      run: make migration
+      run: make migrateup
 
     - name: Test
       run: make test

@@ -44,8 +44,16 @@ jobs:
     - name: Install golang-migrate
       run: |
        curl -L https://github.com/golang-migrate/migrate/releases/download/v4.19.1/migrate.linux-amd64.tar.gz | tar xvz
+       migrate -version
        sudo mv migrate /usr/bin/
        which migrate
+
+    - name: Wait for Postgres
+      run: |
+        for i in {1..10}; do
+          pg_isready -h localhost -p 5432 && break
+          sleep 2
+        done
 
     - name: Run migrations
       run: make migration
